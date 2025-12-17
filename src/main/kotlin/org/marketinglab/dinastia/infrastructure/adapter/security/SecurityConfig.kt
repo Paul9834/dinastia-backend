@@ -32,15 +32,34 @@ class SecurityConfig(
             .cors { it.configurationSource(corsConfigurationSource()) }
             .authorizeHttpRequests { auth ->
                 auth
-                    // Permitir preflight requests (CORS)
                     .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
-                    // Rutas Públicas
+                    // Front
+                    .requestMatchers(
+                        "/",
+                        "/index.html",
+                        "/favicon.ico",
+                        "/static/**",
+                        "/assets/**"
+                    ).permitAll()
+
+                    // 📸 GET imágenes públicas
+                    .requestMatchers(HttpMethod.GET, "/uploads/**").permitAll()
+
+                    // 🔐 Subida protegida
+                    .requestMatchers(HttpMethod.POST, "/api/uploads/**").authenticated()
+
+                    // 🔓 Auth
                     .requestMatchers("/api/auth/**", "/api/usuarios/registro").permitAll()
 
-                    // Todo lo demás requiere Token
-                    .anyRequest().authenticated()
+                    // 🔒 API
+                    .requestMatchers("/api/**").authenticated()
+
+                    .anyRequest().denyAll()
             }
+
+
+
             .sessionManagement {
                 it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             }

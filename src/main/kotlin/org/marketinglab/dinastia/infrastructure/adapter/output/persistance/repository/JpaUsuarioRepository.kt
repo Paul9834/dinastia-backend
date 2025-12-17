@@ -6,6 +6,8 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface JpaUsuarioRepository : JpaRepository<UsuarioEntity, Long> {
-    // Agregamos búsqueda por correo para el Login
+
     fun findByCorreo(correo: String): UsuarioEntity?
+
+    fun existsByCorreo(correo: String): Boolean
 }

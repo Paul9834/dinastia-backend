@@ -18,6 +18,13 @@ class RegistrarUsuarioService(
 ) : RegistrarUsuarioUseCase {
 
     override fun registrar(dto: RegistroUsuarioDto): Usuario {
+
+
+        if (usuarioRepository.existsByCorreo(dto.correo)) {
+            throw RuntimeException("El correo ${dto.correo} ya está registrado")
+        }
+
+
         // 1. Buscar el rol en la BD
         val rol = rolRepository.findByNombre(dto.rolNombre)
             ?: throw RuntimeException("El rol ${dto.rolNombre} no existe")
