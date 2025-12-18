@@ -1,10 +1,12 @@
 package org.marketinglab.dinastia.application.dto
 
+import org.marketinglab.dinastia.infrastructure.adapter.output.persistance.entity.AppointmentEntity
 import java.time.LocalDateTime
 
 data class AppointmentResponse(
     val id: Long,
     val petId: Long,
+    val petName: String,
     val title: String,
     val dateTime: LocalDateTime,
     val type: String,
@@ -27,3 +29,4 @@ data class UpdateAppointmentRequest(
     val notes: String?        = null,
     val type: String?
 )
+

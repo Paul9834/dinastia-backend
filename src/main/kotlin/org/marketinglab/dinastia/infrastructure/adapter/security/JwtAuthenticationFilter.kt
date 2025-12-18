@@ -1,5 +1,6 @@
 package org.marketinglab.dinastia.infrastructure.adapter.security
 
+import io.jsonwebtoken.ExpiredJwtException
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -23,33 +24,48 @@ class JwtAuthenticationFilter(
     ) {
         val authHeader = request.getHeader("Authorization")
 
-        // 1. Revisar si trae el header Authorization: Bearer ...
+        // 1. Si no hay token, dejamos pasar la petición (quizás va a un endpoint público)
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response)
             return
         }
 
-        // 2. Extraer el token y el usuario
-        val token = authHeader.substring(7) // Quitar "Bearer "
-        val userEmail = jwtService.extractUsername(token)
+        val token = authHeader.substring(7)
 
-        // 3. Si hay usuario y nadie está autenticado aún en el contexto
-        if (userEmail != null && SecurityContextHolder.getContext().authentication == null) {
-            val userDetails = this.userDetailsService.loadUserByUsername(userEmail)
+        try {
+            // 2. Intentamos leer el usuario.
+            // AQUÍ ES DONDE OCURRE EL ERROR si el token expiró.
+            val userEmail = jwtService.extractUsername(token)
 
-            // 4. Validar token
-            if (jwtService.isTokenValid(token, userDetails)) {
-                val authToken = UsernamePasswordAuthenticationToken(
-                    userDetails,
-                    null,
-                    userDetails.authorities
-                )
-                authToken.details = WebAuthenticationDetailsSource().buildDetails(request)
+            if (userEmail != null && SecurityContextHolder.getContext().authentication == null) {
+                val userDetails = this.userDetailsService.loadUserByUsername(userEmail)
 
-                // 5. ¡Aprobado! Registrar en el contexto de seguridad
-                SecurityContextHolder.getContext().authentication = authToken
+                if (jwtService.isTokenValid(token, userDetails)) {
+                    val authToken = UsernamePasswordAuthenticationToken(
+                        userDetails,
+                        null,
+                        userDetails.authorities
+                    )
+                    authToken.details = WebAuthenticationDetailsSource().buildDetails(request)
+                    SecurityContextHolder.getContext().authentication = authToken
+                }
             }
+
+            // Si todo salió bien, continuamos
+            filterChain.doFilter(request, response)
+
+        } catch (e: ExpiredJwtException) {
+            // 3. CAPTURAMOS EL ERROR DE TOKEN VENCIDO
+            // En lugar de explotar, devolvemos un JSON limpio con error 401
+            response.status = HttpServletResponse.SC_UNAUTHORIZED
+            response.contentType = "application/json"
+            response.writer.write("{\"error\": \"El token ha expirado\", \"code\": \"TOKEN_EXPIRED\"}")
+
+        } catch (e: Exception) {
+            // 4. Capturamos cualquier otro error (token falso, firma mala, etc)
+            response.status = HttpServletResponse.SC_FORBIDDEN
+            response.contentType = "application/json"
+            response.writer.write("{\"error\": \"Token inválido o malformado\"}")
         }
-        filterChain.doFilter(request, response)
     }
 }

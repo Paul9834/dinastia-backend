@@ -22,13 +22,12 @@ class JwtService {
         val claims = mapOf("rol" to role)
         return createToken(claims, username)
     }
-
     private fun createToken(claims: Map<String, Any>, subject: String): String {
         return Jwts.builder()
-            .setClaims(claims)
-            .setSubject(subject)
+            .setClaims(claims)       // 1. IMPORTANTE: Guardar roles
+            .setSubject(subject)     // 2. IMPORTANTE: Guardar el usuario (email)
             .setIssuedAt(Date(System.currentTimeMillis()))
-            .setExpiration(Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 horas
+            .setExpiration(Date(System.currentTimeMillis() + 1000 * 60)) // 1 minuto
             .signWith(getSigningKey(), SignatureAlgorithm.HS256)
             .compact()
     }

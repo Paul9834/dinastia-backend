@@ -99,8 +99,9 @@ class AppointmentService(
     }
 
     private fun AppointmentEntity.toResponse() = AppointmentResponse(
-        id = id, // id ya no necesita !! porque en tu entidad es 'val id: Long = 0'
+        id = id!!,
         petId = pet.id!!,
+        petName = pet.name, // <--- ASIGNAMOS EL NOMBRE AQUÍ
         title = title,
         dateTime = dateTime,
         type = type.name,
