@@ -59,7 +59,6 @@ class SecurityConfig(
             }
 
 
-
             .sessionManagement {
                 it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             }
@@ -77,7 +76,6 @@ class SecurityConfig(
         configuration.allowedHeaders = listOf("*")
         configuration.allowCredentials = true
 
-        // Agregar estos headers explícitamente ayuda con algunos navegadores/proxies
         configuration.exposedHeaders = listOf("Authorization", "Content-Type")
 
         val source = UrlBasedCorsConfigurationSource()

@@ -27,7 +27,7 @@ class JwtService {
             .setClaims(claims)       // 1. IMPORTANTE: Guardar roles
             .setSubject(subject)     // 2. IMPORTANTE: Guardar el usuario (email)
             .setIssuedAt(Date(System.currentTimeMillis()))
-            .setExpiration(Date(System.currentTimeMillis() + 1000 * 60)) // 1 minuto
+            .setExpiration(Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 horas
             .signWith(getSigningKey(), SignatureAlgorithm.HS256)
             .compact()
     }
