@@ -54,6 +54,7 @@ class SecurityConfig(
 
                     // 🔒 API
                     .requestMatchers("/api/**").authenticated()
+                    .requestMatchers("/error").permitAll()
 
                     .anyRequest().denyAll()
             }
