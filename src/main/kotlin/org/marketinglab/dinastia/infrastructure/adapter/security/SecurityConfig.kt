@@ -53,8 +53,8 @@ class SecurityConfig(
                     .requestMatchers("/api/auth/**", "/api/usuarios/registro").permitAll()
 
                     // 🔒 API
-                    .requestMatchers("/api/**").authenticated()
                     .requestMatchers("/error").permitAll()
+                    .requestMatchers("/api/**").authenticated()
 
                     .anyRequest().denyAll()
             }

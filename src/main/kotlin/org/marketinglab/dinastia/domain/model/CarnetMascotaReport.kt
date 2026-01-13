@@ -1,5 +1,8 @@
 package org.marketinglab.dinastia.domain.model
 
+import org.marketinglab.dinastia.application.dto.DesparasitacionRow
+import org.marketinglab.dinastia.application.dto.VacunaRow
+
 data class CarnetMascotaReport(
     val nombre: String,
     val especie: String,
@@ -13,14 +16,3 @@ data class CarnetMascotaReport(
     val desparasitaciones: List<DesparasitacionRow>
 )
 
-data class VacunaRow(
-    val vacunaLab: String,
-    val fechaAplicacion: String,
-    val certificado: String
-)
-
-data class DesparasitacionRow(
-    val productoMetodo: String,
-    val fechaAplicacion: String,
-    val certificado: String
-)
