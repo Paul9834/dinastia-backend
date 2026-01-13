@@ -2,14 +2,31 @@
 <jasperReport name="CarnetMascota" language="java" pageWidth="243" pageHeight="380" columnWidth="243" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="c9292926-2544-46eb-8ec7-302345678910">
     <property name="com.jaspersoft.studio.unit.pageHeight" value="mm"/>
     <property name="com.jaspersoft.studio.unit.pageWidth" value="mm"/>
-    <style name="Etiqueta" forecolor="#666666" fontName="Poppins" fontSize="5.0" bold="true"/>
-    <style name="Dato" forecolor="#333333" fontName="Poppins" fontSize="7.0" bold="true"/>
-    <style name="TableHeader" mode="Opaque" forecolor="#2E7D32" backcolor="#E8F5E9" hTextAlign="Center" vTextAlign="Middle" fontName="Poppins" fontSize="6.0" bold="true"/>
-    <style name="TableCell" mode="Opaque" backcolor="#FFFFFF" hTextAlign="Center" vTextAlign="Middle" fontName="Poppins" fontSize="6.0">
+
+    <!-- ===== Modern Styles ===== -->
+    <style name="Label" forecolor="#7A7A7A" fontName="Poppins" fontSize="5.2" bold="false"/>
+    <style name="Value" forecolor="#1F2937" fontName="Poppins" fontSize="7.8" bold="true"/>
+    <style name="BrandTitle" forecolor="#FFFFFF" fontName="Poppins" fontSize="14.5" bold="true"/>
+    <style name="SectionTitle" forecolor="#0F172A" fontName="Poppins" fontSize="9.6" bold="true"/>
+    <style name="Chip" mode="Opaque" backcolor="#1B5E20" forecolor="#E8F5E9" fontName="Poppins" fontSize="5.5" bold="true" hTextAlign="Center" vTextAlign="Middle"/>
+
+    <style name="TableHeaderModern" mode="Opaque" backcolor="#F1F5F9" forecolor="#0F172A" fontName="Poppins" fontSize="6.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
         <box>
-            <bottomPen lineWidth="0.5" lineColor="#EEEEEE"/>
+            <pen lineWidth="0.5" lineColor="#E2E8F0"/>
         </box>
     </style>
+    <style name="TableCellModern" mode="Opaque" backcolor="#FFFFFF" forecolor="#334155" fontName="Poppins" fontSize="6.0" hTextAlign="Center" vTextAlign="Middle">
+        <box>
+            <pen lineWidth="0.5" lineColor="#EEF2F7"/>
+        </box>
+    </style>
+    <style name="TableCellAlt" mode="Opaque" backcolor="#FAFAFB" forecolor="#334155" fontName="Poppins" fontSize="6.0" hTextAlign="Center" vTextAlign="Middle">
+        <box>
+            <pen lineWidth="0.5" lineColor="#EEF2F7"/>
+        </box>
+    </style>
+
+    <!-- ===== Datasets ===== -->
     <dataset name="VacunasDataset" uuid="4b3425e4-1218-4504-95ed-87f541175658">
         <field name="nombreVacuna" class="java.lang.String"/>
         <field name="laboratorio" class="java.lang.String"/>
@@ -19,6 +36,8 @@
         <field name="nombreProducto" class="java.lang.String"/>
         <field name="fechaAplicacion" class="java.lang.String"/>
     </dataset>
+
+    <!-- ===== Params ===== -->
     <parameter name="nombreMascota" class="java.lang.String"/>
     <parameter name="especie" class="java.lang.String"/>
     <parameter name="raza" class="java.lang.String"/>
@@ -31,179 +50,250 @@
     <parameter name="qrPayload" class="java.lang.String"/>
     <parameter name="dsVacunas" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource"/>
     <parameter name="dsDesparasitacion" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource"/>
+
     <detail>
         <band height="380" splitType="Stretch">
-            <element kind="rectangle" uuid="9c204961-002d-4537-8025-055c86689d01" x="0" y="0" width="243" height="153" backcolor="#FFFFFF" radius="5">
-                <pen lineWidth="0.5" lineColor="#E0E0E0"/>
-            </element>
-            <element kind="rectangle" uuid="a7f83b21-4123-4c56-8901-23456789abcd" x="0" y="0" width="243" height="35" backcolor="#2E7D32">
+
+            <!-- Background -->
+            <element kind="rectangle" uuid="11111111-1111-1111-1111-111111111111" x="0" y="0" width="243" height="380" backcolor="#F6F7FB">
                 <pen lineWidth="0.0"/>
             </element>
-            <element kind="staticText" uuid="b8e94c32-5234-5d67-9012-34567890bcde" x="10" y="5" width="150" height="25" forecolor="#FFFFFF" fontName="Poppins" fontSize="14.0" bold="true" vTextAlign="Middle">
+
+            <!-- Header (NO gradient - compatible) -->
+            <!-- base -->
+            <element kind="rectangle" uuid="22222222-2222-2222-2222-222222222222" x="8" y="8" width="227" height="40" backcolor="#2E7D32" radius="10">
+                <pen lineWidth="0.0"/>
+            </element>
+            <!-- top darker strip (fake gradient) -->
+            <element kind="rectangle" uuid="22222222-2222-2222-2222-222222222223" x="8" y="8" width="227" height="18" backcolor="#1B5E20" radius="0">
+                <pen lineWidth="0.0"/>
+            </element>
+
+            <element kind="staticText" uuid="33333333-3333-3333-3333-333333333333" x="18" y="18" width="120" height="20" style="BrandTitle" vTextAlign="Middle">
                 <text><![CDATA[DINASTÍA]]></text>
             </element>
-            <element kind="staticText" uuid="c9f05d43-6345-6e78-0123-45678901cdef" x="160" y="10" width="73" height="15" forecolor="#A5D6A7" fontName="Poppins" fontSize="6.0" hTextAlign="Right" vTextAlign="Middle">
-                <text><![CDATA[CARNET DIGITAL]]></text>
+
+            <element kind="staticText" uuid="44444444-4444-4444-4444-444444444444" x="172" y="20" width="55" height="16" style="Chip">
+                <text><![CDATA[CARNET]]></text>
             </element>
-            <element kind="image" uuid="d0a16e54-7456-7f89-1234-56789012def0" x="10" y="45" width="60" height="60" scaleImage="FillFrame" onErrorType="Icon" hImageAlign="Center" vImageAlign="Middle">
+
+            <!-- ===== Card 1: Pet info (shadow trick) ===== -->
+            <!-- shadow -->
+            <element kind="rectangle" uuid="55555555-5555-5555-5555-555555555555" x="9" y="56" width="227" height="108" backcolor="#E9EDF3" radius="12">
+                <pen lineWidth="0.0"/>
+            </element>
+            <!-- card -->
+            <element kind="rectangle" uuid="66666666-6666-6666-6666-666666666666" x="8" y="55" width="227" height="108" backcolor="#FFFFFF" radius="12">
+                <pen lineWidth="0.5" lineColor="#E5E7EB"/>
+            </element>
+
+            <!-- Photo (rounded feel with border) -->
+            <element kind="image" uuid="d0a16e54-7456-7f89-1234-56789012def0" x="16" y="70" width="58" height="58" scaleImage="FillFrame" onErrorType="Icon" hImageAlign="Center" vImageAlign="Middle">
                 <expression><![CDATA[$P{fotoMascota}]]></expression>
                 <box>
-                    <pen lineWidth="1.0" lineColor="#EEEEEE"/>
+                    <pen lineWidth="1.0" lineColor="#E5E7EB"/>
                 </box>
             </element>
-            <element kind="staticText" uuid="e1b27f65-8567-8090-2345-67890123ef01" x="80" y="42" width="100" height="8" style="Etiqueta">
+
+            <!-- Name -->
+            <element kind="staticText" uuid="e1b27f65-8567-8090-2345-67890123ef01" x="82" y="66" width="60" height="8" style="Label">
                 <text><![CDATA[NOMBRE]]></text>
             </element>
-            <element kind="textField" uuid="f2c38076-9678-9101-3456-78901234f012" x="80" y="50" width="110" height="10" textAdjust="ScaleFont" style="Dato">
+            <element kind="textField" uuid="f2c38076-9678-9101-3456-78901234f012" x="82" y="74" width="115" height="12" textAdjust="ScaleFont" style="Value">
                 <expression><![CDATA[$P{nombreMascota} != null ? $P{nombreMascota}.toUpperCase() : "-"]]></expression>
             </element>
-            <element kind="staticText" uuid="03d49187-0789-0212-4567-890123450123" x="80" y="62" width="40" height="8" style="Etiqueta">
+
+            <!-- Row: especie / raza -->
+            <element kind="staticText" uuid="03d49187-0789-0212-4567-890123450123" x="82" y="88" width="40" height="8" style="Label">
                 <text><![CDATA[ESPECIE]]></text>
             </element>
-            <element kind="textField" uuid="14e50298-1890-1323-5678-901234561234" x="80" y="70" width="50" height="10" style="Dato">
-                <expression><![CDATA[$P{especie}]]></expression>
+            <element kind="textField" uuid="14e50298-1890-1323-5678-901234561234" x="82" y="96" width="54" height="10" textAdjust="ScaleFont" style="Value">
+                <expression><![CDATA[$P{especie} != null ? $P{especie} : "-"]]></expression>
             </element>
-            <element kind="staticText" uuid="25f61309-2901-2434-6789-012345672345" x="135" y="62" width="40" height="8" style="Etiqueta">
+
+            <element kind="staticText" uuid="25f61309-2901-2434-6789-012345672345" x="142" y="88" width="35" height="8" style="Label">
                 <text><![CDATA[RAZA]]></text>
             </element>
-            <element kind="textField" uuid="36072410-3012-3545-7890-123456783456" x="135" y="70" width="65" height="10" style="Dato">
-                <expression><![CDATA[$P{raza}]]></expression>
+            <element kind="textField" uuid="36072410-3012-3545-7890-123456783456" x="142" y="96" width="86" height="10" textAdjust="ScaleFont" style="Value">
+                <expression><![CDATA[$P{raza} != null ? $P{raza} : "-"]]></expression>
             </element>
-            <element kind="staticText" uuid="47183521-4123-4656-8901-234567894567" x="80" y="82" width="40" height="8" style="Etiqueta">
+
+            <!-- Row: sexo / microchip -->
+            <element kind="staticText" uuid="47183521-4123-4656-8901-234567894567" x="82" y="108" width="30" height="8" style="Label">
                 <text><![CDATA[SEXO]]></text>
             </element>
-            <element kind="textField" uuid="58294632-5234-5767-9012-345678905678" x="80" y="90" width="50" height="10" style="Dato">
-                <expression><![CDATA[$P{sexo}]]></expression>
+            <element kind="textField" uuid="58294632-5234-5767-9012-345678905678" x="82" y="116" width="54" height="10" textAdjust="ScaleFont" style="Value">
+                <expression><![CDATA[$P{sexo} != null ? $P{sexo} : "-"]]></expression>
             </element>
-            <element kind="staticText" uuid="ad749187-0789-0212-4567-890123450123" x="135" y="82" width="50" height="8" style="Etiqueta">
+
+            <element kind="staticText" uuid="ad749187-0789-0212-4567-890123450123" x="142" y="108" width="50" height="8" style="Label">
                 <text><![CDATA[MICROCHIP]]></text>
             </element>
-            <element kind="textField" uuid="be850298-1890-1323-5678-901234561234" x="135" y="90" width="65" height="10" style="Dato">
-                <expression><![CDATA[$P{microchip}]]></expression>
+            <element kind="textField" uuid="be850298-1890-1323-5678-901234561234" x="142" y="116" width="86" height="10" textAdjust="ScaleFont" style="Value">
+                <expression><![CDATA[$P{microchip} != null ? $P{microchip} : "-"]]></expression>
             </element>
-            <element kind="staticText" uuid="8b527965-8567-8090-2345-678901238901" x="80" y="102" width="50" height="8" style="Etiqueta">
+
+            <!-- Row: nacimiento / propietario -->
+            <element kind="staticText" uuid="8b527965-8567-8090-2345-678901238901" x="82" y="128" width="55" height="8" style="Label">
                 <text><![CDATA[NACIMIENTO]]></text>
             </element>
-            <element kind="textField" uuid="9c638076-9678-9101-3456-789012349012" x="80" y="110" width="50" height="10" style="Dato">
-                <expression><![CDATA[$P{fechaNacimiento}]]></expression>
+            <element kind="textField" uuid="9c638076-9678-9101-3456-789012349012" x="82" y="136" width="54" height="10" textAdjust="ScaleFont" style="Value">
+                <expression><![CDATA[$P{fechaNacimiento} != null ? $P{fechaNacimiento} : "-"]]></expression>
             </element>
-            <element kind="staticText" uuid="cf961309-2901-2434-6789-012345672345" x="80" y="122" width="100" height="8" style="Etiqueta">
+
+            <element kind="staticText" uuid="cf961309-2901-2434-6789-012345672345" x="142" y="128" width="70" height="8" style="Label">
                 <text><![CDATA[PROPIETARIO]]></text>
             </element>
-            <element kind="textField" uuid="d0a72410-3012-3545-7890-123456783456" x="80" y="130" width="110" height="10" style="Dato">
-                <expression><![CDATA[$P{propietario}]]></expression>
+            <element kind="textField" uuid="d0a72410-3012-3545-7890-123456783456" x="142" y="136" width="86" height="10" textAdjust="ScaleFont" style="Value">
+                <expression><![CDATA[$P{propietario} != null ? $P{propietario} : "-"]]></expression>
             </element>
-            <element kind="component" uuid="e1b83521-4123-4656-8901-234567894567" x="195" y="105" width="40" height="40">
+
+            <!-- QR (top-right inside card) -->
+            <element kind="component" uuid="e1b83521-4123-4656-8901-234567894567" x="190" y="68" width="38" height="38">
                 <component kind="barcode4j:QRCode">
                     <codeExpression><![CDATA[$P{qrPayload} != null ? $P{qrPayload} : "dinastia.app"]]></codeExpression>
                 </component>
             </element>
-            <element kind="rectangle" uuid="f2c94632-5234-5767-9012-345678905678" x="0" y="157" width="243" height="100" backcolor="#FFFFFF" radius="5">
-                <pen lineWidth="0.5" lineColor="#E0E0E0"/>
+
+            <!-- ===== Card 2: Vaccines ===== -->
+            <!-- shadow -->
+            <element kind="rectangle" uuid="77777777-7777-7777-7777-777777777777" x="9" y="172" width="227" height="94" backcolor="#E9EDF3" radius="12">
+                <pen lineWidth="0.0"/>
             </element>
-            <element kind="staticText" uuid="03d05743-6345-6878-0123-456789016789" x="10" y="162" width="223" height="15" forecolor="#2E7D32" fontName="Poppins" fontSize="10.0" bold="true" hTextAlign="Left" vTextAlign="Middle">
-                <text><![CDATA[HISTORIAL DE VACUNACIÓN]]></text>
+            <!-- card -->
+            <element kind="rectangle" uuid="88888888-8888-8888-8888-888888888888" x="8" y="171" width="227" height="94" backcolor="#FFFFFF" radius="12">
+                <pen lineWidth="0.5" lineColor="#E5E7EB"/>
             </element>
-            <element kind="line" uuid="14e16854-7456-7989-1234-567890127890" x="10" y="177" width="223" height="1" forecolor="#E0E0E0"/>
-            <element kind="component" uuid="25f27965-8567-8090-2345-678901238901" x="10" y="180" width="223" height="70">
+
+            <element kind="staticText" uuid="03d05743-6345-6878-0123-456789016789" x="16" y="178" width="200" height="12" style="SectionTitle" vTextAlign="Middle">
+                <text><![CDATA[Historial de vacunación]]></text>
+            </element>
+
+            <element kind="line" uuid="14e16854-7456-7989-1234-567890127890" x="16" y="193" width="211" height="1" forecolor="#E5E7EB"/>
+
+            <element kind="component" uuid="25f27965-8567-8090-2345-678901238901" x="16" y="198" width="211" height="60">
                 <component kind="table">
                     <datasetRun uuid="36038076-9678-9101-3456-789012349012" subDataset="VacunasDataset">
                         <dataSourceExpression><![CDATA[$P{dsVacunas}]]></dataSourceExpression>
                     </datasetRun>
-                    <column kind="single" uuid="47149187-0789-0212-4567-890123450123" width="115">
-                        <columnHeader height="15">
-                            <element kind="staticText" uuid="58250298-1890-1323-5678-901234561234" x="0" y="0" width="115" height="15" style="TableHeader">
+
+                    <column kind="single" uuid="47149187-0789-0212-4567-890123450123" width="107">
+                        <columnHeader height="14">
+                            <element kind="staticText" uuid="58250298-1890-1323-5678-901234561234" x="0" y="0" width="107" height="14" style="TableHeaderModern">
                                 <text><![CDATA[VACUNA / LAB]]></text>
                             </element>
                         </columnHeader>
-                        <detailCell height="15">
-                            <element kind="textField" uuid="69361309-2901-2434-6789-012345672345" x="0" y="0" width="115" height="15" textAdjust="ScaleFont" hTextAlign="Left" style="TableCell">
+                        <detailCell height="14">
+                            <element kind="textField" uuid="69361309-2901-2434-6789-012345672345"
+                                     x="0" y="0" width="107" height="14"
+                                     textAdjust="ScaleFont" hTextAlign="Left"
+                                     style="TableCellModern">
                                 <paragraph leftIndent="3"/>
                                 <expression><![CDATA[$F{nombreVacuna} + " - " + ($F{laboratorio}!=null ? $F{laboratorio} : "")]]></expression>
                             </element>
                         </detailCell>
                     </column>
-                    <column kind="single" uuid="7a472410-3012-3545-7890-123456783456" width="60">
-                        <columnHeader height="15">
-                            <element kind="staticText" uuid="8b583521-4123-4656-8901-234567894567" x="0" y="0" width="60" height="15" style="TableHeader">
-                                <text><![CDATA[FECHA APLICACIÓN]]></text>
+
+                    <column kind="single" uuid="7a472410-3012-3545-7890-123456783456" width="56">
+                        <columnHeader height="14">
+                            <element kind="staticText" uuid="8b583521-4123-4656-8901-234567894567" x="0" y="0" width="56" height="14" style="TableHeaderModern">
+                                <text><![CDATA[FECHA]]></text>
                             </element>
                         </columnHeader>
-                        <detailCell height="15">
-                            <element kind="textField" uuid="9c694632-5234-5767-9012-345678905678" x="0" y="0" width="60" height="15" style="TableCell">
-                                <expression><![CDATA[$F{fechaAplicacion}]]></expression>
+                        <detailCell height="14">
+                            <element kind="textField" uuid="9c694632-5234-5767-9012-345678905678"
+                                     x="0" y="0" width="56" height="14"
+                                     style="TableCellAlt">
+                                <expression><![CDATA[$F{fechaAplicacion} != null ? $F{fechaAplicacion} : "-"]]></expression>
                             </element>
                         </detailCell>
                     </column>
+
                     <column kind="single" uuid="d0a38076-9678-9101-3456-789012349012" width="48">
-                        <columnHeader height="15">
-                            <element kind="staticText" uuid="e1b49187-0789-0212-4567-890123450123" x="0" y="0" width="48" height="15" style="TableHeader">
-                                <text><![CDATA[CERTIFICADO]]></text>
+                        <columnHeader height="14">
+                            <element kind="staticText" uuid="e1b49187-0789-0212-4567-890123450123" x="0" y="0" width="48" height="14" style="TableHeaderModern">
+                                <text><![CDATA[OK]]></text>
                             </element>
                         </columnHeader>
-                        <detailCell height="15">
-                            <element kind="frame" uuid="f2c50298-1890-1323-5678-901234561234" x="0" y="0" width="48" height="15" style="TableCell">
-                                <element kind="staticText" uuid="03d61309-2901-2434-6789-012345672345" x="0" y="0" width="48" height="15" forecolor="#2E7D32" fontName="Poppins" fontSize="4.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+                        <detailCell height="14">
+                            <element kind="frame" uuid="f2c50298-1890-1323-5678-901234561234" x="0" y="0" width="48" height="14" style="TableCellModern">
+                                <element kind="staticText" uuid="03d61309-2901-2434-6789-012345672345" x="0" y="0" width="48" height="14" forecolor="#1B5E20" fontName="Poppins" fontSize="4.6" bold="true" hTextAlign="Center" vTextAlign="Middle">
                                     <text><![CDATA[VERIFICADO]]></text>
                                 </element>
-                            </element>å
+                            </element>
                         </detailCell>
                     </column>
+
                 </component>
             </element>
-            <element kind="rectangle" uuid="1a2b3c4d-5e6f-7890-1234-567890abcdef" x="0" y="265" width="243" height="100" backcolor="#FFFFFF" radius="5">
-                <pen lineWidth="0.5" lineColor="#E0E0E0"/>
+
+            <!-- ===== Card 3: Deworming ===== -->
+            <!-- shadow -->
+            <element kind="rectangle" uuid="99999999-9999-9999-9999-999999999999" x="9" y="276" width="227" height="94" backcolor="#E9EDF3" radius="12">
+                <pen lineWidth="0.0"/>
             </element>
-            <element kind="staticText" uuid="2b3c4d5e-6f7a-8901-2345-678901bcdef0" x="10" y="270" width="223" height="15" forecolor="#2E7D32" fontName="Poppins" fontSize="10.0" bold="true" hTextAlign="Left" vTextAlign="Middle">
-                <text><![CDATA[CONTROL DESPARASITACIÓN]]></text>
+            <!-- card -->
+            <element kind="rectangle" uuid="aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa" x="8" y="275" width="227" height="94" backcolor="#FFFFFF" radius="12">
+                <pen lineWidth="0.5" lineColor="#E5E7EB"/>
             </element>
-            <element kind="line" uuid="3c4d5e6f-7a8b-9012-3456-789012cdef01" x="10" y="285" width="223" height="1" forecolor="#E0E0E0"/>
-            <element kind="component" uuid="4d5e6f7a-8b9c-0123-4567-890123def012" x="10" y="288" width="223" height="70">
+
+            <element kind="staticText" uuid="2b3c4d5e-6f7a-8901-2345-678901bcdef0" x="16" y="282" width="200" height="12" style="SectionTitle" vTextAlign="Middle">
+                <text><![CDATA[Control desparasitación]]></text>
+            </element>
+
+            <element kind="line" uuid="3c4d5e6f-7a8b-9012-3456-789012cdef01" x="16" y="297" width="211" height="1" forecolor="#E5E7EB"/>
+
+            <element kind="component" uuid="4d5e6f7a-8b9c-0123-4567-890123def012" x="16" y="302" width="211" height="60">
                 <component kind="table">
                     <datasetRun uuid="5e6f7a8b-9c0d-1234-5678-901234ef0123" subDataset="DesparasitacionDataset">
                         <dataSourceExpression><![CDATA[$P{dsDesparasitacion}]]></dataSourceExpression>
                     </datasetRun>
-                    <column kind="single" uuid="6f7a8b9c-0d1e-2345-6789-012345f01234" width="115">
-                        <columnHeader height="15">
-                            <element kind="staticText" uuid="7a8b9c0d-1e2f-3456-7890-123456012345" x="0" y="0" width="115" height="15" style="TableHeader">
+
+                    <column kind="single" uuid="6f7a8b9c-0d1e-2345-6789-012345f01234" width="107">
+                        <columnHeader height="14">
+                            <element kind="staticText" uuid="7a8b9c0d-1e2f-3456-7890-123456012345" x="0" y="0" width="107" height="14" style="TableHeaderModern">
                                 <text><![CDATA[PRODUCTO / MÉTODO]]></text>
                             </element>
                         </columnHeader>
-                        <detailCell height="15">
-                            <element kind="textField" uuid="8b9c0d1e-2f3a-4567-8901-234567123456" x="0" y="0" width="115" height="15" textAdjust="ScaleFont" hTextAlign="Left" style="TableCell">
+                        <detailCell height="14">
+                            <element kind="textField" uuid="8b9c0d1e-2f3a-4567-8901-234567123456" x="0" y="0" width="107" height="14" textAdjust="ScaleFont" hTextAlign="Left" style="TableCellModern">
                                 <paragraph leftIndent="3"/>
-                                <expression><![CDATA[$F{nombreProducto}]]></expression>
+                                <expression><![CDATA[$F{nombreProducto} != null ? $F{nombreProducto} : "-"]]></expression>
                             </element>
                         </detailCell>
                     </column>
-                    <column kind="single" uuid="9c0d1e2f-3a4b-5678-9012-345678234567" width="60">
-                        <columnHeader height="15">
-                            <element kind="staticText" uuid="0d1e2f3a-4b5c-6789-0123-456789345678" x="0" y="0" width="60" height="15" style="TableHeader">
-                                <text><![CDATA[FECHA APLICACIÓN]]></text>
+
+                    <column kind="single" uuid="9c0d1e2f-3a4b-5678-9012-345678234567" width="56">
+                        <columnHeader height="14">
+                            <element kind="staticText" uuid="0d1e2f3a-4b5c-6789-0123-456789345678" x="0" y="0" width="56" height="14" style="TableHeaderModern">
+                                <text><![CDATA[FECHA]]></text>
                             </element>
                         </columnHeader>
-                        <detailCell height="15">
-                            <element kind="textField" uuid="1e2f3a4b-5c6d-7890-1234-567890456789" x="0" y="0" width="60" height="15" style="TableCell">
-                                <expression><![CDATA[$F{fechaAplicacion}]]></expression>
+                        <detailCell height="14">
+                            <element kind="textField" uuid="1e2f3a4b-5c6d-7890-1234-567890456789" x="0" y="0" width="56" height="14" style="TableCellAlt">
+                                <expression><![CDATA[$F{fechaAplicacion} != null ? $F{fechaAplicacion} : "-"]]></expression>
                             </element>
                         </detailCell>
                     </column>
+
                     <column kind="single" uuid="b4c1a4c8-7c8f-4b2c-8b72-9d4b66c2c4e1" width="48">
-                        <columnHeader height="15">
-                            <element kind="staticText" uuid="1b8cb5c4-6c0c-4f8f-9b24-2f2a1a6a2a44" x="0" y="0" width="48" height="15" style="TableHeader">
-                                <text><![CDATA[CERTIFICADO]]></text>
+                        <columnHeader height="14">
+                            <element kind="staticText" uuid="1b8cb5c4-6c0c-4f8f-9b24-2f2a1a6a2a44" x="0" y="0" width="48" height="14" style="TableHeaderModern">
+                                <text><![CDATA[OK]]></text>
                             </element>
                         </columnHeader>
-                        <detailCell height="15">
-                            <element kind="frame" uuid="d5a6c1b9-1e8e-4f93-b0e0-3d8b4a3a2f3a" x="0" y="0" width="48" height="15" style="TableCell">
-                                <element kind="staticText" uuid="8f1a6c2d-1c7c-4f4e-a9dd-3a7b5d2b0f12" x="0" y="0" width="48" height="15" forecolor="#2E7D32" fontName="Poppins" fontSize="4.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+                        <detailCell height="14">
+                            <element kind="frame" uuid="d5a6c1b9-1e8e-4f93-b0e0-3d8b4a3a2f3a" x="0" y="0" width="48" height="14" style="TableCellModern">
+                                <element kind="staticText" uuid="8f1a6c2d-1c7c-4f4e-a9dd-3a7b5d2b0f12" x="0" y="0" width="48" height="14" forecolor="#1B5E20" fontName="Poppins" fontSize="4.6" bold="true" hTextAlign="Center" vTextAlign="Middle">
                                     <text><![CDATA[VERIFICADO]]></text>
                                 </element>
                             </element>
                         </detailCell>
                     </column>
+
                 </component>
             </element>
+
         </band>
     </detail>
 </jasperReport>
