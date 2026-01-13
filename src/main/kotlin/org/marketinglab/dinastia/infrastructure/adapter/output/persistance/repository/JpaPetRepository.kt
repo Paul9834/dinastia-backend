@@ -6,6 +6,12 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface JpaPetRepository : JpaRepository<PetEntity, Long> {
-    fun findAllByUserId(userId: Long): List<PetEntity>
-    fun findByIdAndUserId(id: Long, userId: Long): PetEntity?
+
+    fun findAllByOwnerId(ownerId: Long): List<PetEntity>
+
+    fun findAllByCreatedByIdAndOwnerIsNull(createdById: Long): List<PetEntity>
+
+    fun findByIdAndOwnerId(id: Long, ownerId: Long): PetEntity?
+
+    fun findByIdAndCreatedById(id: Long, createdById: Long): PetEntity?
 }

@@ -22,7 +22,8 @@ class VaccineService(
     fun create(request: CreateVaccineRequest): VaccineResponse {
         val user = currentUser()
 
-        val pet = petRepository.findByIdAndUserId(request.petId, user.id!!)
+        val pet = petRepository.findByIdAndOwnerId(request.petId, user.id!!)
+            ?: petRepository.findByIdAndCreatedById(request.petId, user.id!!)
             ?: throw NoSuchElementException("Pet not found")
 
         val entity = VaccineEntity(
@@ -41,13 +42,13 @@ class VaccineService(
     fun listByPet(petId: Long): List<VaccineResponse> {
         val user = currentUser()
         // El repositorio ya filtra por userId, así que es seguro
-        val vaccines = vaccineRepository.findAllByPetIdAndPetUserId(petId, user.id!!)
+        val vaccines = vaccineRepository.findAllByPetIdAccessibleByUserId(petId, user.id!!)
         return vaccines.map { it.toResponse() }
     }
 
     fun delete(id: Long) {
         val user = currentUser()
-        val vaccine = vaccineRepository.findByIdAndPetUserId(id, user.id!!)
+        val vaccine = vaccineRepository.findByIdAccessibleByUserId(id, user.id!!)
             ?: throw NoSuchElementException("Vaccine not found")
         vaccineRepository.delete(vaccine)
     }

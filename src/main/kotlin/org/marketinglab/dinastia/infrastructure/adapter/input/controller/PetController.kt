@@ -19,9 +19,19 @@ class PetController(
         return ResponseEntity.status(HttpStatus.CREATED).body(petService.create(request))
     }
 
-    @GetMapping
+    @GetMapping("/mine")
     fun listMine(): ResponseEntity<Any> {
         return ResponseEntity.ok(petService.listMine())
+    }
+
+    @GetMapping("/pending")
+    fun listPending(): ResponseEntity<Any> {
+        return ResponseEntity.ok(petService.listPending())
+    }
+
+    @PutMapping("/{id}/assign-owner/{ownerId}")
+    fun assignOwner(@PathVariable id: Long, @PathVariable ownerId: Long): ResponseEntity<Any> {
+        return ResponseEntity.ok(petService.assignOwner(id, ownerId))
     }
 
     @GetMapping("/{id}")

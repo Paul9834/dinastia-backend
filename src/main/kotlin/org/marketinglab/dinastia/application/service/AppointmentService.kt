@@ -21,10 +21,8 @@ class AppointmentService(
     fun create(request: CreateAppointmentRequest): AppointmentResponse {
         val user = currentUser()
 
-        val pet = petRepository.findByIdAndUserId(request.petId, user.id!!)
-            ?: throw NoSuchElementException("Pet not found")
+        val pet = findPetAccessible(request.petId, user.id!!)
 
-        // Aquí usamos el constructor de la clase, esto funcionará bien
         val entity = AppointmentEntity(
             title = request.title,
             dateTime = request.dateTime,
@@ -41,9 +39,9 @@ class AppointmentService(
         val user = currentUser()
 
         val items = if (petId != null) {
-            appointmentRepository.findAllByPetIdAndPetUserId(petId, user.id!!)
+            appointmentRepository.findAllByPetIdAccessibleByUserId(petId, user.id!!)
         } else {
-            appointmentRepository.findAllByPetUserId(user.id!!)
+            appointmentRepository.findAllAccessibleByUserId(user.id!!)
         }
 
         return items.map { it.toResponse() }
@@ -51,45 +49,38 @@ class AppointmentService(
 
     fun getById(id: Long): AppointmentResponse {
         val user = currentUser()
-        val appt = appointmentRepository.findByIdAndPetUserId(id, user.id!!)
+        val appt = appointmentRepository.findByIdAccessibleByUserId(id, user.id!!)
             ?: throw NoSuchElementException("Appointment not found")
         return appt.toResponse()
     }
 
-    // --- AQUÍ ESTÁ LA CORRECCIÓN PRINCIPAL ---
     fun update(id: Long, request: UpdateAppointmentRequest): AppointmentResponse {
         val user = currentUser()
 
-        // 1. Recuperamos la entidad existente
-        val current = appointmentRepository.findByIdAndPetUserId(id, user.id!!)
+        val current = appointmentRepository.findByIdAccessibleByUserId(id, user.id!!)
             ?: throw NoSuchElementException("Appointment not found")
-
-        // 2. Modificamos sus propiedades (vars) directamente
-        //    (NO usamos .copy() porque AppointmentEntity no es data class)
 
         request.title?.let { current.title = it }
         request.dateTime?.let { current.dateTime = it }
         request.notes?.let { current.notes = it }
 
-        // Conversión segura de String a Enum para TYPE
-        request.type?.let {
-            current.type = AppointmentType.valueOf(it.uppercase())
-        }
+        request.type?.let { current.type = AppointmentType.valueOf(it.uppercase()) }
+        request.status?.let { current.status = AppointmentStatus.valueOf(it.uppercase()) }
 
-        // Conversión segura de String a Enum para STATUS
-        request.status?.let {
-            current.status = AppointmentStatus.valueOf(it.uppercase())
-        }
-
-        // 3. Guardamos los cambios
         return appointmentRepository.save(current).toResponse()
     }
 
     fun delete(id: Long) {
         val user = currentUser()
-        val appt = appointmentRepository.findByIdAndPetUserId(id, user.id!!)
+        val appt = appointmentRepository.findByIdAccessibleByUserId(id, user.id!!)
             ?: throw NoSuchElementException("Appointment not found")
         appointmentRepository.delete(appt)
+    }
+
+    private fun findPetAccessible(petId: Long, userId: Long): PetEntity {
+        return petRepository.findByIdAndOwnerId(petId, userId)
+            ?: petRepository.findByIdAndCreatedById(petId, userId)
+            ?: throw NoSuchElementException("Pet not found")
     }
 
     private fun currentUser(): UsuarioEntity {
@@ -101,7 +92,7 @@ class AppointmentService(
     private fun AppointmentEntity.toResponse() = AppointmentResponse(
         id = id!!,
         petId = pet.id!!,
-        petName = pet.name, // <--- ASIGNAMOS EL NOMBRE AQUÍ
+        petName = pet.name,
         title = title,
         dateTime = dateTime,
         type = type.name,

@@ -24,7 +24,11 @@ data class PetEntity(
 
     val photoUrl: String? = null,
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "owner_user_id", nullable = true)
+    val owner: UsuarioEntity? = null,
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id", nullable = false)
-    val user: UsuarioEntity
+    @JoinColumn(name = "created_by_user_id", nullable = false)
+    val createdBy: UsuarioEntity
 )

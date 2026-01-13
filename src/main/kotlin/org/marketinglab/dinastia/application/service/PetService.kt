@@ -17,7 +17,11 @@ class PetService(
 ) {
 
     fun create(request: CreatePetRequest): PetResponse {
-        val user = currentUser()
+        val actor = currentUser()
+
+        val owner = request.ownerId?.let { ownerId ->
+            userRepository.findById(ownerId).orElseThrow { NoSuchElementException("Owner not found") }
+        }
 
         val entity = PetEntity(
             name = request.name,
@@ -26,28 +30,36 @@ class PetService(
             birthDate = request.birthDate,
             sex = request.sex,
             photoUrl = request.photoUrl,
-            user = user
+            owner = owner,
+            createdBy = actor
         )
 
         return petRepository.save(entity).toResponse()
     }
 
     fun listMine(): List<PetResponse> {
-        val user = currentUser()
-        return petRepository.findAllByUserId(user.id!!).map { it.toResponse() }
+        val actor = currentUser()
+        return petRepository.findAllByOwnerId(actor.id!!).map { it.toResponse() }
+    }
+
+    fun listPending(): List<PetResponse> {
+        val actor = currentUser()
+        return petRepository.findAllByCreatedByIdAndOwnerIsNull(actor.id!!).map { it.toResponse() }
     }
 
     fun getById(id: Long): PetResponse {
-        val user = currentUser()
-        val pet = petRepository.findByIdAndUserId(id, user.id!!)
-            ?: throw NoSuchElementException("Pet not found")
+        val actor = currentUser()
+        val pet = petRepository.findById(id).orElseThrow { NoSuchElementException("Pet not found") }
+
+        if (!canAccess(pet, actor)) throw IllegalAccessException("Forbidden")
         return pet.toResponse()
     }
 
     fun update(id: Long, request: UpdatePetRequest): PetResponse {
-        val user = currentUser()
-        val current = petRepository.findByIdAndUserId(id, user.id!!)
-            ?: throw NoSuchElementException("Pet not found")
+        val actor = currentUser()
+        val current = petRepository.findById(id).orElseThrow { NoSuchElementException("Pet not found") }
+
+        if (!canAccess(current, actor)) throw IllegalAccessException("Forbidden")
 
         val updated = current.copy(
             name = request.name ?: current.name,
@@ -62,10 +74,33 @@ class PetService(
     }
 
     fun delete(id: Long) {
-        val user = currentUser()
-        val pet = petRepository.findByIdAndUserId(id, user.id!!)
-            ?: throw NoSuchElementException("Pet not found")
+        val actor = currentUser()
+        val pet = petRepository.findById(id).orElseThrow { NoSuchElementException("Pet not found") }
+
+        if (!canAccess(pet, actor)) throw IllegalAccessException("Forbidden")
         petRepository.delete(pet)
+    }
+
+    fun assignOwner(petId: Long, ownerId: Long): PetResponse {
+        val actor = currentUser()
+        val pet = petRepository.findById(petId).orElseThrow { NoSuchElementException("Pet not found") }
+
+        val isAdminOrVet = actor.rol?.nombre in setOf("ADMIN", "VET")
+        val isCreator = pet.createdBy.id == actor.id
+
+        if (!isAdminOrVet && !isCreator) throw IllegalAccessException("Forbidden")
+
+        val owner = userRepository.findById(ownerId).orElseThrow { NoSuchElementException("Owner not found") }
+
+        val updated = pet.copy(owner = owner)
+        return petRepository.save(updated).toResponse()
+    }
+
+    private fun canAccess(pet: PetEntity, actor: UsuarioEntity): Boolean {
+        val isAdminOrVet = actor.rol?.nombre in setOf("ADMIN", "VET")
+        val isOwner = pet.owner?.id != null && pet.owner?.id == actor.id
+        val isCreator = pet.createdBy.id == actor.id
+        return isAdminOrVet || isOwner || isCreator
     }
 
     private fun currentUser(): UsuarioEntity {

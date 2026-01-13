@@ -9,9 +9,9 @@ data class CreatePetRequest(
     val breed: String? = null,
     val birthDate: LocalDate? = null,
     val sex: String? = null,
-    val photoUrl: String? = null
+    val photoUrl: String? = null,
+    val ownerId: Long? = null
 )
-
 data class UpdatePetRequest(
     val name: String? = null,
     val species: String? = null,
