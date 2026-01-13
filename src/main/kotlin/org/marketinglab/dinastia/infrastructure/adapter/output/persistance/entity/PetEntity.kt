@@ -20,8 +20,10 @@ data class PetEntity(
 
     val birthDate: LocalDate? = null,
 
-    val sex: String? = null,
-
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    val sex: PetSex = PetSex.UNKNOWN,
+    
     val photoUrl: String? = null,
 
     @ManyToOne(fetch = FetchType.LAZY, optional = true)

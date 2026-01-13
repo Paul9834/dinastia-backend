@@ -4,6 +4,7 @@ import org.marketinglab.dinastia.application.dto.CreatePetRequest
 import org.marketinglab.dinastia.application.dto.PetResponse
 import org.marketinglab.dinastia.application.dto.UpdatePetRequest
 import org.marketinglab.dinastia.infrastructure.adapter.output.persistance.entity.PetEntity
+import org.marketinglab.dinastia.infrastructure.adapter.output.persistance.entity.PetSex
 import org.marketinglab.dinastia.infrastructure.adapter.output.persistance.entity.UsuarioEntity
 import org.marketinglab.dinastia.infrastructure.adapter.output.persistance.repository.JpaPetRepository
 import org.marketinglab.dinastia.infrastructure.adapter.output.persistance.repository.JpaUsuarioRepository
@@ -19,18 +20,14 @@ class PetService(
     fun create(request: CreatePetRequest): PetResponse {
         val actor = currentUser()
 
-        val owner = request.ownerId?.let { ownerId ->
-            userRepository.findById(ownerId).orElseThrow { NoSuchElementException("Owner not found") }
-        }
-
         val entity = PetEntity(
             name = request.name,
             species = request.species,
             breed = request.breed,
             birthDate = request.birthDate,
-            sex = request.sex,
+            sex = request.sex ?: PetSex.UNKNOWN,
             photoUrl = request.photoUrl,
-            owner = owner,
+            owner = actor,
             createdBy = actor
         )
 
