@@ -21,7 +21,19 @@ class CarnetController(
     fun carnet(@PathVariable id: Long): ResponseEntity<ByteArray> {
         val params = buildParams(fotoStream = null)
 
-        val vacunas = listOf(VacunaRow("Rabia", "Zoetis", "2026-01-10"))
+        val vacunas =
+
+            listOf(VacunaRow("Rabia", "Zoetis", "2026-01-10"),
+                VacunaRow("Rabia", "Zoetis", "2026-01-10"),
+                VacunaRow("Rabia", "Zoetis", "2026-01-10"),
+                VacunaRow("Rabia", "Zoetis", "2026-01-10"),
+                VacunaRow("Rabia", "Zoetis", "2026-01-10"),
+                VacunaRow("Rabia", "Zoetis", "2026-01-10"),
+                VacunaRow("Rabia", "Zoetis", "2026-01-10"),
+                VacunaRow("Rabia", "Zoetis", "2026-01-10"),
+                VacunaRow("Rabia", "Zoetis", "2026-01-10")
+
+            )
 
         val desparas = listOf(
             DesparasitacionRow(

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fontFamilies>
+    <fontFamily name="Poppins">
+        <normal><![CDATA[jasper/fonts/Poppins-Regular.ttf]]></normal>
+        <bold><![CDATA[jasper/fonts/Poppins-SemiBold.ttf]]></bold>
+        <pdfEncoding><![CDATA[Identity-H]]></pdfEncoding>
+        <pdfEmbedded><![CDATA[true]]></pdfEmbedded>
+    </fontFamily>
+
+    <fontFamily name="PoppinsLight">
+        <normal><![CDATA[jasper/fonts/Poppins-Light.ttf]]></normal>
+        <bold><![CDATA[jasper/fonts/Poppins-Light.ttf]]></bold>
+        <pdfEncoding><![CDATA[Identity-H]]></pdfEncoding>
+        <pdfEmbedded><![CDATA[true]]></pdfEmbedded>
+    </fontFamily>
+</fontFamilies>
