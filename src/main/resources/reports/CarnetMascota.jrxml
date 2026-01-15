@@ -102,7 +102,7 @@
             </element>
 
             <element kind="image" uuid="d0a16e54-7456-7f89-1234-56789012def0"
-                     x="16" y="70" width="58" height="58"
+                     x="20" y="70" width="45" height="45"
                      scaleImage="FillFrame" onErrorType="Icon" hImageAlign="Center" vImageAlign="Middle">
                 <expression><![CDATA[$P{fotoMascota}]]></expression>
                 <box>

@@ -11,23 +11,22 @@ import java.io.ByteArrayOutputStream
 
 
 @Service
-class JasperCarnetService {
+class JasperCarnetService(
+    private val compiledCarnetReport: JasperReport
+) {
 
     fun generarCarnetPdf(
         params: Map<String, Any?>,
         vacunas: List<VacunaRow>,
         desparasitaciones: List<DesparasitacionRow>
     ): ByteArray {
-        val jrxml = ClassPathResource("reports/CarnetMascota.jrxml").inputStream
-        val jasperReport = JasperCompileManager.compileReport(jrxml)
-
         val finalParams = HashMap<String, Any?>()
         finalParams.putAll(params)
         finalParams["dsVacunas"] = JRBeanCollectionDataSource(vacunas)
         finalParams["dsDesparasitacion"] = JRBeanCollectionDataSource(desparasitaciones)
 
         val jasperPrint = JasperFillManager.fillReport(
-            jasperReport,
+            compiledCarnetReport,
             finalParams,
             JREmptyDataSource(1)
         )
@@ -36,6 +35,4 @@ class JasperCarnetService {
         JasperExportManager.exportReportToPdfStream(jasperPrint, out)
         return out.toByteArray()
     }
-
-
 }
