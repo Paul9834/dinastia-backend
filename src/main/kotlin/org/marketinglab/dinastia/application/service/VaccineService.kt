@@ -39,6 +39,13 @@ class VaccineService(
         return vaccineRepository.save(entity).toResponse()
     }
 
+    fun listByPetPublic(petId: Long): List<VaccineResponse> {
+        val vaccines = vaccineRepository.findAllByPetId(petId)
+        return vaccines.map { it.toResponse() }
+    }
+
+
+
     fun listByPet(petId: Long): List<VaccineResponse> {
         val user = currentUser()
         // El repositorio ya filtra por userId, así que es seguro

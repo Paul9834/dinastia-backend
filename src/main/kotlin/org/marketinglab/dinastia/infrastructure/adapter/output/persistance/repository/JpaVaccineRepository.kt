@@ -31,4 +31,6 @@ interface JpaVaccineRepository : JpaRepository<VaccineEntity, Long> {
         """
     )
     fun findByIdAccessibleByUserId(id: Long, userId: Long): VaccineEntity?
+
+    fun findAllByPetId(petId: Long): List<VaccineEntity>
 }

@@ -1,12 +1,14 @@
 package org.marketinglab.dinastia.application.service
 
 import org.marketinglab.dinastia.application.dto.DesparasitacionRow
+import org.marketinglab.dinastia.application.dto.PetResponse
 import org.marketinglab.dinastia.application.dto.VacunaRow
 import org.springframework.stereotype.Service
 import java.io.ByteArrayInputStream
 import java.io.InputStream
 
 data class CarnetData(
+    val pet: PetResponse,
     val params: Map<String, Any?>,
     val vacunas: List<VacunaRow>,
     val desparas: List<DesparasitacionRow>,
@@ -21,12 +23,15 @@ class CarnetQueryServiceImpl(
     private val petService: PetService,
     private val vaccineService: VaccineService,
     private val uploadFileService: UploadFileService,
+    private val tokenService: CarnetTokenService
 ) : CarnetQueryService {
 
     override fun getCarnetData(petId: Long): CarnetData {
-        val pet = petService.getById(petId)
 
-        val vacunas = vaccineService.listByPet(petId).map { v ->
+        val petEntity = petService.getByIdPublic(petId)
+        val pet = petService.mapToResponse(petEntity)
+
+        val vacunas = vaccineService.listByPetPublic(petId).map { v ->
             VacunaRow(
                 nombreVacuna = v.name,
                 laboratorio = v.veterinarian,
@@ -36,9 +41,9 @@ class CarnetQueryServiceImpl(
 
         val desparas = emptyList<DesparasitacionRow>()
 
-        val fotoStream: InputStream =
-            uploadFileService.openPetPhotoByPublicUrl(pet.photoUrl)
-                ?: ByteArrayInputStream(ByteArray(0))
+        val fotoStream: InputStream = uploadFileService.openPetPhotoByPublicUrl(pet.photoUrl) ?: ByteArrayInputStream(ByteArray(0))
+
+        val token = tokenService.generateToken(petId)
 
         val params = mapOf(
             "nombreMascota" to (pet.name.ifBlank { "N/A" }),
@@ -50,13 +55,13 @@ class CarnetQueryServiceImpl(
             "microchip" to "N/A",
             "propietario" to "N/A",
             "fotoMascota" to fotoStream,
-            "qrPayload" to "dinastia://pets/$petId"
+            "qrPayload" to "http://localhost:9090/verify/pet/$petId/$token"
         )
 
         return CarnetData(
+            pet = pet,
             params = params,
             vacunas = vacunas,
             desparas = desparas
         )
-    }
-}
+    }}

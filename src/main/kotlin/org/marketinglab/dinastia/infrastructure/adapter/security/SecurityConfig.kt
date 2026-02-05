@@ -56,6 +56,7 @@ class SecurityConfig(
                     .requestMatchers("/error").permitAll()
                     .requestMatchers("/api/**").authenticated()
 
+                    .requestMatchers("/verify/**").permitAll()
                     .anyRequest().denyAll()
             }
 

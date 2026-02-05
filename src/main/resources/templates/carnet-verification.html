@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Verificación Carnet - Dinastía</title>
+
+    <style>
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f1f8e9;
+            color: #1b5e20;
+            margin: 0;
+            padding: 24px;
+        }
+
+        .card {
+            max-width: 420px;
+            margin: auto;
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 8px 24px rgba(0,0,0,.12);
+        }
+
+        h1 {
+            margin-top: 0;
+            font-size: 1.4rem;
+        }
+
+        .ok {
+            color: #2e7d32;
+            font-weight: 600;
+        }
+
+        .error {
+            color: #c62828;
+            font-weight: 600;
+        }
+
+        .label {
+            font-weight: 600;
+        }
+
+        .small {
+            font-size: 0.85rem;
+            color: #555;
+        }
+
+        .pet-info {
+            margin-top: 16px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+
+    <h1>🐾 Dinastía Mascotas</h1>
+
+    <!-- Estado válido -->
+    <div th:if="${valid}">
+        <p class="ok">✅ Carnet Auténtico</p>
+
+        <div class="pet-info">
+            <div>
+                <span class="label">Nombre:</span>
+                <span th:text="${pet.name}"></span>
+            </div>
+
+            <div>
+                <span class="label">Especie:</span>
+                <span th:text="${pet.species}"></span>
+            </div>
+
+            <div>
+                <span class="label">Raza:</span>
+                <span th:text="${pet.breed} ?: 'N/A'"></span>
+            </div>
+
+            <div>
+                <span class="label">Sexo:</span>
+                <span th:text="${pet.sex}"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Estado inválido -->
+    <div th:unless="${valid}">
+        <p class="error">❌ Carnet no válido o no encontrado</p>
+
+        <p class="small">
+            Este QR no corresponde a un carnet emitido por Dinastía Mascotas.
+        </p>
+    </div>
+
+    <p class="small" style="margin-top:20px;">
+        Verificación oficial Dinastía
+    </p>
+
+    <p class="small">
+        Fecha servidor:<br>
+        <span id="date"></span>
+    </p>
+
+</div>
+
+<script>
+    document.getElementById("date").innerText = new Date().toLocaleString();
+</script>
+
+</body>
+</html>
