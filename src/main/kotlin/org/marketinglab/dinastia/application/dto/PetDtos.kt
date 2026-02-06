@@ -3,6 +3,7 @@ package org.marketinglab.dinastia.application.dto
 
 import org.marketinglab.dinastia.infrastructure.adapter.output.persistance.entity.PetEntity
 import org.marketinglab.dinastia.infrastructure.adapter.output.persistance.entity.PetSex
+import org.marketinglab.dinastia.infrastructure.adapter.output.persistance.entity.PetStatus
 import java.time.LocalDate
 
 data class CreatePetRequest(
@@ -30,7 +31,8 @@ data class PetResponse(
     val breed: String?,
     val birthDate: LocalDate?,
     val sex: PetSex,
-    val photoUrl: String?
+    val photoUrl: String?,
+    val status: PetStatus
 )
 
 private fun PetEntity.toResponse() = PetResponse(
@@ -40,6 +42,6 @@ private fun PetEntity.toResponse() = PetResponse(
     breed = breed,
     birthDate = birthDate,
     sex = sex,
-    photoUrl = photoUrl
+    photoUrl = photoUrl,
+    status = status
 )
-

@@ -23,6 +23,10 @@ data class PetEntity(
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     val sex: PetSex = PetSex.UNKNOWN,
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    val status: PetStatus = PetStatus.ACTIVO,
     
     val photoUrl: String? = null,
 

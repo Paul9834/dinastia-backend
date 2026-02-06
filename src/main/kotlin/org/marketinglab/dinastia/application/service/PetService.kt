@@ -119,7 +119,8 @@
                 breed = entity.breed,
                 birthDate = entity.birthDate,
                 sex = entity.sex,
-                photoUrl = entity.photoUrl
+                photoUrl = entity.photoUrl,
+                status = entity.status
             )
         }
 
@@ -131,7 +132,8 @@
                 breed = breed,
                 birthDate = birthDate,
                 sex = sex,
-                photoUrl = photoUrl
+                photoUrl = photoUrl,
+                status = status
             )
         }
     }

@@ -63,6 +63,28 @@
     <div th:if="${valid}">
         <p class="ok">✅ Carnet Auténtico</p>
 
+        <div style="margin-bottom:12px;">
+            <span class="label">Estado:</span>
+            <span th:text="${pet.status}"></span>
+        </div>
+
+        <p th:if="${pet.status.name() == 'ACTIVO'}" class="ok">
+            🟢 Mascota registrada y activa
+        </p>
+
+        <p th:if="${pet.status.name() == 'PERDIDO'}" class="error">
+            ⚠ Mascota reportada como PERDIDA
+        </p>
+
+        <p th:if="${pet.status.name() == 'FALLECIDO'}" style="color:#555;font-weight:600;">
+            ⚫ Registro histórico (mascota fallecida)
+        </p>
+
+        <p th:if="${pet.status.name() == 'INACTIVO'}" style="color:#ef6c00;font-weight:600;">
+            🟠 Carnet deshabilitado
+        </p>
+
+
         <div class="pet-info">
             <div>
                 <span class="label">Nombre:</span>

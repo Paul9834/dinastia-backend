@@ -30,10 +30,6 @@ class CarnetVerificationServiceImpl(
             null
         }
 
-
-        println("TOKEN ESPERADO verifyPetCarnet = ${tokenService.generateToken(petId)}")
-        println("TOKEN RECIBIDO verifyPetCarnet = $token")
-
         return VerificationResult(
             valid = carnetData != null,
             carnetData = carnetData
